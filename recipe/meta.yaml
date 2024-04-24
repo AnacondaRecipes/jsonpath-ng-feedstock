@@ -25,8 +25,6 @@ requirements:
   run:
     - python
     - ply
-    - decorator
-    - six
 
 test:
   source_files:
