@@ -1,20 +1,19 @@
 {% set name = "jsonpath-ng" %}
-{% set version = "1.7.0" %}
+{% set version = "1.8.0" %}
 
 package:
   name: {{ name|lower }}
   version: {{ version }}
 
 source:
-  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: f6f5f7fd4e5ff79c785f1573b394043b39849fb2bb47bcead935d12b00beab3c
+  url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name|replace('-', '_') }}-{{ version }}.tar.gz
+  sha256: 54252968134b5e549ea5b872f1df1168bd7defe1a52fed5a358c194e1943ddc3
 
 build:
-  skip: true #[py<37]
   number: 0
-  entry_points:
-    - jsonpath.py=jsonpath_ng.bin.jsonpath:entry_point
   script: {{ PYTHON }} -m pip install --no-deps --no-build-isolation . -vv
+  entry_points:
+    - jsonpath_ng=jsonpath_ng.bin.jsonpath:entry_point
 
 requirements:
   host:
@@ -24,21 +23,20 @@ requirements:
     - setuptools >=18.5
   run:
     - python
-    - ply
 
 test:
   source_files:
-    - jsonpath_ng
     - tests
   imports:
     - jsonpath_ng
   requires:
     - pip
     - pytest
+    - hypothesis
   commands:
     - pip check
-    - pytest -vv
-
+    - jsonpath_ng --help
+    - pytest tests -vv
 
 about:
   home: https://github.com/h2non/jsonpath-ng
@@ -51,6 +49,7 @@ about:
     including arithmetic and binary comparison operators.
   dev_url: https://github.com/h2non/jsonpath-ng
   doc_url: https://github.com/h2non/jsonpath-ng
+
 extra:
   recipe-maintainers:
     - shcheklein
